@@ -10,15 +10,11 @@ class Day1Part2 {
 
     fun calculate(): Int {
         var increased = 0
-        input.forEachIndexed { index, _ ->
-            if (index > 2) {
-                var currentWindow = 0
-                var previousWindow = 0
-                for (current in windowSize-1 downTo 0)
-                    currentWindow += input[index - current]
-                for (previous in windowSize downTo 1)
-                    previousWindow += input[index - previous]
 
+        input.forEachIndexed { index, _ ->
+            if (index >= windowSize) {
+                val previousWindow = input.subList(index-windowSize, index).sum()
+                val currentWindow = input.subList(index-windowSize+1, index+1).sum()
                 if (currentWindow > previousWindow) increased++
             }
         }
