@@ -8,50 +8,25 @@ class Day3Part2 {
         .lines()
 
     fun calculate(): Int {
-       return getOutput(input, ::filterCO2Scrubber) * getOutput(input, ::filterOxygenGenerator)
+        val oxygen = filterTest { bits -> if (bits.count { it == 1 } >= bits.count { it == 0 }) "1" else "0" }
+        val co2 = filterTest { bits -> if (bits.count { it == 1 } >= bits.count { it == 0 }) "0" else "1" }
+        return oxygen * co2
     }
 
-    private fun getOutput(input: List<String>, filter: (input: List<String>, position: Int) -> List<String>) : Int {
-        var copyInput = input
-        while (copyInput.size > 1) {
-            for(position in 0..copyInput.maxOf { it.length }){
-                if (copyInput.size > 1) {
-                    copyInput = filter(copyInput, position)
+    private fun filterTest(filter: (bits: List<Int>) -> String): Int {
+        var filteredInput = input
+        while (filteredInput.size > 1) {
+            for (position in 0..filteredInput.maxOf { it.length }) {
+                if (filteredInput.size > 1) {
+                    val bits = getBitsByPosition(filteredInput, position)
+                    filteredInput = filteredInput.filter { line -> line[position].toString() == filter.invoke(bits) }
                 }
             }
         }
-        return parseInt(copyInput.first(), 2)
+        return parseInt(filteredInput.first(), 2)
     }
 
-    private fun filterOxygenGenerator(
-        input: List<String>,
-        position: Int
-    ): List<String> {
-        var oxygenInput = input
-        val bits = getBitsByPosition(oxygenInput)[position] ?: listOf()
-        oxygenInput = if (bits.count { it == 1 } >= bits.count { it == 0 }) {
-            oxygenInput.filter { it[position].toString() == "1" }
-        } else {
-            oxygenInput.filter { it[position].toString() == "0" }
-        }
-        return oxygenInput
-    }
-
-    private fun filterCO2Scrubber(
-        input: List<String>,
-        position: Int
-    ): List<String> {
-        var co2ScrubberInput = input
-        val bits = getBitsByPosition(co2ScrubberInput)[position] ?: listOf()
-        co2ScrubberInput = if (bits.count { it == 1 } >= bits.count { it == 0 }) {
-            co2ScrubberInput.filter { it[position].toString() == "0" }
-        } else {
-            co2ScrubberInput.filter { it[position].toString() == "1" }
-        }
-        return co2ScrubberInput
-    }
-
-    private fun getBitsByPosition(input: List<String>): MutableMap<Int, MutableList<Int>> {
+    private fun getBitsByPosition(input: List<String>, position: Int): MutableList<Int> {
         val bitsByPosition: MutableMap<Int, MutableList<Int>> = mutableMapOf()
         input.map { bit ->
             bit.forEachIndexed { position, char ->
@@ -61,6 +36,6 @@ class Day3Part2 {
                 )
             }
         }
-        return bitsByPosition
+        return bitsByPosition[position] ?: mutableListOf()
     }
 }
