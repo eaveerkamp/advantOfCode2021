@@ -1,6 +1,6 @@
 package com.eveerkamp.aoc
 
-import com.eveerkamp.aoc.day6.Day6Part2
+import com.eveerkamp.aoc.day7.Day7Part2
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
@@ -9,5 +9,5 @@ class AdventOfCode
 
 fun main(args: Array<String>) {
     runApplication<AdventOfCode>(*args)
-    println("Result ${Day6Part2().calculate()}")
+    println("Result ${Day7Part2().calculate()}")
 }
