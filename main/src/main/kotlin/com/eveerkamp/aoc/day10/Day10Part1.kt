@@ -7,15 +7,13 @@ class Day10Part1 {
         .lines()
         .map { line -> line.windowed(1, 1) }
 
-    val tags = listOf(Pair("(", ")"), Pair("[", "]"), Pair("{", "}"), Pair("<", ">"))
+    private val tags = listOf(Pair("(", ")"), Pair("[", "]"), Pair("{", "}"), Pair("<", ">"))
 
     fun calculate(): Int {
         var illegalCount = 0
-        val open = mutableListOf<String>()
         input.forEach { line ->
             var stop = false
-            open.clear()
-            println(line)
+            val open = mutableListOf<String>()
             var closedCount = 0
             line.forEachIndexed { index, tag ->
                 if (!stop) {
